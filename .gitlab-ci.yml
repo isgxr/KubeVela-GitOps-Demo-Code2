@@ -49,7 +49,7 @@ webhook-request:
   stage: request
   script:
     - |
-      curl -X POST -H "Content-Type: application/json" -d "{"componentProperties":{"${$COMPONENT_NAME}": "{"image": "${BUILD_IMAGE}"}"}"}" ${WEBHOOK_URL}
+      curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"${COMPONENT_NAME}": {"image": "${BUILD_IMAGE}"}}}' ${WEBHOOK_URL}
 
   dependencies:
     - docker-build
