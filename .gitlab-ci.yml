@@ -50,7 +50,9 @@ webhook-request:
     - apk add --update curl && rm -rf /var/cache/apk/*
   script:
     - |
-      curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"${COMPONENT_NAME}": {"image": "${BUILD_IMAGE}"}}}' ${WEBHOOK_URL}
+      echo $COMPONENT_NAME
+      echo $BUILD_IMAGE
+      curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"$COMPONENT_NAME": {"image": "$BUILD_IMAGE"}}}' $WEBHOOK_URL
 
   dependencies:
     - docker-build
