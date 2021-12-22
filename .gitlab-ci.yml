@@ -24,14 +24,7 @@ docker-build:
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        tag=""
-        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-      else
-        tag=":$CI_COMMIT_REF_SLUG"
-        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-      fi
+    - tag=$CI_COMMIT_SHA
     - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
     - echo "BUILD_IMAGE="$CI_REGISTRY_IMAGE${tag}"" >> build.env
     - docker push "$CI_REGISTRY_IMAGE${tag}"
@@ -50,7 +43,7 @@ webhook-request:
     - apk add --update curl && rm -rf /var/cache/apk/*
   script:
     - |
-      curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"'"$COMPONENT_NAME"'": {"image": "'"$BUILD_IMAGE"'"}}}' $WEBHOOK_URL
+      curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"'"$COMPONENT_NAME"'":{"image" "'"$BUILD_IMAGE"'"}},"gitInfo":{"user":"'"$CI_COMMIT_USER"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
 
   dependencies:
     - docker-build
