@@ -45,8 +45,9 @@ docker-build:
       dotenv: build.env
   
 webhook-request:
-  image: node:12-stretch-slim
   stage: request
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
   script:
     - |
       curl -X POST -H "Content-Type: application/json" -d '{"componentProperties":{"${COMPONENT_NAME}": {"image": "${BUILD_IMAGE}"}}}' ${WEBHOOK_URL}
