@@ -1,16 +1,18 @@
-# Dockerfile
-FROM golang:1.16-alpine as builder
+FROM golang:1.17.0-alpine3.14 as builder
 WORKDIR /app
 
 COPY go.mod go.mod
 COPY go.sum go.sum
 RUN go mod download
 
-COPY main.go .
-RUN go build -o kubevela-demo-cicd-app main.go
+COPY static/index.html ./static/index.html
+COPY app.go .
+RUN go build -o kubevela-demo-app app.go
 
 FROM alpine:3.10
 WORKDIR /app
-COPY --from=builder /app/kubevela-demo-cicd-app /app/kubevela-demo-cicd-app
-ENTRYPOINT ./kubevela-demo-cicd-app
-EXPOSE 8088
+COPY static/index.html ./static/index.html
+COPY --from=builder /app/kubevela-demo-app /app/kubevela-demo-app
+ENTRYPOINT ./kubevela-demo-app
+
+EXPOSE 9080

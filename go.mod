@@ -1,5 +1,5 @@
-module github.com/FogDong/gitops-test
+module authors.nocalhost.dev
 
-go 1.16
+go 1.17
 
-require github.com/go-sql-driver/mysql v1.6.0
+require github.com/gorilla/mux v1.8.0 // indirect
