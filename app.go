@@ -16,7 +16,7 @@ func main() {
 		data := struct {
 			Version string
 		}{
-			Version: "v1.0.0",
+			Version: "v2.0.0",
 		}
 
 		err = tmpl.Execute(w, data)
