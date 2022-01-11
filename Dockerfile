@@ -1,18 +1,11 @@
-FROM golang:1.17.0-alpine3.14 as builder
-WORKDIR /app
+FROM node:16-alpine as builder
+WORKDIR /app/demo
+ADD . .
+RUN yarn install && yarn build
 
-COPY go.mod go.mod
-COPY go.sum go.sum
-RUN go mod download
-
-COPY static/index.html ./static/index.html
-COPY app.go .
-RUN go build -o kubevela-demo-app app.go
-
-FROM alpine:3.10
-WORKDIR /app
-COPY static/index.html ./static/index.html
-COPY --from=builder /app/kubevela-demo-app /app/kubevela-demo-app
-ENTRYPOINT ./kubevela-demo-app
-
-EXPOSE 9080
+FROM nginx:1.21
+ARG GITVERSION
+COPY --from=builder /app/demo/dist /usr/share/nginx/html
+COPY default.conf /etc/nginx/nginx.conf
+RUN echo "${GITVERSION}" > /tmp/version
+CMD ["nginx", "-g", "daemon off;"]
