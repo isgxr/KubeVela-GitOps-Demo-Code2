@@ -15,7 +15,7 @@ export default {
   },
   data(){
     return {
-      v: 'v1.0.0',
+      v: 'v2.0.0',
     }
   },
 }
