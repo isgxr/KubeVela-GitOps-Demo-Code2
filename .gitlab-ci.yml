@@ -37,13 +37,13 @@ docker-build:
     reports:
       dotenv: build.env
   
-webhook-request:
-  stage: request
-  before_script:
-    - apk add --update curl && rm -rf /var/cache/apk/*
-  script:
-    - |
-      curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$APP_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
+# webhook-request:
+#   stage: request
+#   before_script:
+#     - apk add --update curl && rm -rf /var/cache/apk/*
+#   script:
+#     - |
+#       curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$APP_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
 
-  dependencies:
-    - docker-build
+#   dependencies:
+#     - docker-build
